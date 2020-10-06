@@ -14,7 +14,7 @@
 	</parent>
 	<groupId>se.aminburhan</groupId>
 	<artifactId>amin-pet-clinic</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>amin-pet-clinic</name>
 	<description>My version of Spring Framework pet clinic that I am developing from scratch.</description>
 
@@ -40,7 +40,7 @@
 
 	<scm>
 		<developerConnection>scm:git:https://github.com/aminburhan/amin-pet-clinic.git</developerConnection>
-	  <tag>amin-pet-clinic-0.0.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 </project>
