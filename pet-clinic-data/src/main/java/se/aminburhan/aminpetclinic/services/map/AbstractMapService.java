@@ -1,15 +1,13 @@
 package se.aminburhan.aminpetclinic.services.map;
 
+import se.aminburhan.aminpetclinic.model.BaseEntity;
 import se.aminburhan.aminpetclinic.services.CrudService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public abstract class AbstractMapService<T, ID> implements CrudService<T, ID> {
+public abstract class AbstractMapService<T extends BaseEntity> implements CrudService<T, Long> {
 
-    protected Map<ID, T> map = new HashMap<>();
+    protected Map<Long, T> map = new HashMap<>();
 
     @Override
     public Set<T> findAll() {
@@ -17,12 +15,31 @@ public abstract class AbstractMapService<T, ID> implements CrudService<T, ID> {
     }
 
     @Override
-    public T findById(ID id) {
+    public T findById(Long id) {
         return map.get(id);
     }
 
     @Override
-    public abstract T save(T object);
+    public T save(T object) {
+        if (object != null) {
+            if (object.getId() == null) {
+                object.setId(getNextId());
+            }
+            map.put(object.getId(), object);
+            return object;
+        }
+        else {
+            throw new IllegalArgumentException("Object cannot be null");
+        }
+    }
+
+    private Long getNextId(){
+        if (map.isEmpty()) {
+            return 1L;
+        } else {
+            return Collections.max(map.keySet()) + 1;
+        }
+    }
 
     @Override
     public void delete(T object) {
@@ -30,7 +47,7 @@ public abstract class AbstractMapService<T, ID> implements CrudService<T, ID> {
     }
 
     @Override
-    public void deleteById(ID id) {
+    public void deleteById(Long id) {
         map.remove(id);
 
     }

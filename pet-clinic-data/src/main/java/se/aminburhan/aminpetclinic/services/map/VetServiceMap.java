@@ -5,10 +5,6 @@ import se.aminburhan.aminpetclinic.model.Vet;
 import se.aminburhan.aminpetclinic.services.VetService;
 
 @Service
-public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
+public class VetServiceMap extends AbstractMapService<Vet> implements VetService {
 
-    @Override
-    public Vet save(Vet object) {
-        return map.put(object.getId(), object);
-    }
 }

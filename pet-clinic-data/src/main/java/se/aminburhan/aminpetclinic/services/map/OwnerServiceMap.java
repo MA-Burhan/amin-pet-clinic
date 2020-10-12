@@ -7,7 +7,7 @@ import se.aminburhan.aminpetclinic.services.OwnerService;
 import java.util.Map;
 
 @Service
-public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+public class OwnerServiceMap extends AbstractMapService<Owner> implements OwnerService {
 
     @Override
     public Owner findByLastName(String lastName) {
@@ -19,8 +19,4 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
         return null;
     }
 
-    @Override
-    public Owner save(Owner object) {
-        return map.put(object.getId(), object);
-    }
 }
