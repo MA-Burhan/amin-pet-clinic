@@ -12,7 +12,7 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>se.aminburhan</groupId>
+	<groupId>maburhan</groupId>
 	<artifactId>amin-pet-clinic</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<name>amin-pet-clinic</name>
