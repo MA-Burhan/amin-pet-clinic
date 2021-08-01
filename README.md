@@ -1,2 +1,2 @@
 # amin-pet-clinic
-My version of the Spring Framework pet clinic that I'm developing from scratch.
+A version of the Spring Framework Petclinic sample application,  that I'm developing from scratch, as part of a course.
