@@ -5,6 +5,7 @@ import maburhan.aminpetclinic.services.CrudService;
 
 import java.util.*;
 
+//TODO maybe add generics for ID type - AbstractMapService<T extends BaseEntity, ID> implements CrudService<T, ID>
 public abstract class AbstractMapService<T extends BaseEntity> implements CrudService<T, Long> {
 
     protected Map<Long, T> map = new HashMap<>();
