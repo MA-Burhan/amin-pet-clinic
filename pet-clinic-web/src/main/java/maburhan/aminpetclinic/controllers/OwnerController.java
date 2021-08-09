@@ -12,7 +12,6 @@ public class OwnerController {
 
     private final OwnerService ownerService;
 
-    @Autowired
     public OwnerController(OwnerService ownerService) {
         this.ownerService = ownerService;
     }
