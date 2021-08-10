@@ -1,12 +1,13 @@
 package maburhan.aminpetclinic.bootstrap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import com.github.javafaker.Faker;
 import maburhan.aminpetclinic.model.Owner;
 import maburhan.aminpetclinic.model.Vet;
 import maburhan.aminpetclinic.services.OwnerService;
 import maburhan.aminpetclinic.services.VetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 @Component
 public class Dataloader implements CommandLineRunner {
@@ -23,27 +24,23 @@ public class Dataloader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Owner owner1 = new Owner();
-        owner1.setFirstName("Lionel");
-        owner1.setLastName("Messi");
-        ownerService.save(owner1);
+        Faker faker = new Faker();
 
-        Owner owner2 = new Owner();
-        owner2.setFirstName("Cristiano");
-        owner2.setLastName("Ronaldo");
-        ownerService.save(owner2);
+        for (int i = 0; i < 10; i++) {
+            Owner owner = new Owner();
+            owner.setFirstName(faker.name().firstName());
+            owner.setLastName(faker.name().lastName());
+            ownerService.save(owner);
+        }
 
         System.out.println("Loaded Owners....");
 
-        Vet vet1 = new Vet();
-        vet1.setFirstName("LeBron");
-        vet1.setLastName("James");
-        vetService.save(vet1);
-
-        Vet vet2 = new Vet();
-        vet2.setFirstName("Jimmy");
-        vet2.setLastName("Buttler");
-        vetService.save(vet2);
+        for (int i = 0; i < 10; i++) {
+            Vet vet = new Vet();
+            vet.setFirstName(faker.name().firstName());
+            vet.setLastName(faker.name().firstName());
+            vetService.save(vet);
+        }
 
         System.out.println("Loaded Vets....");
 

@@ -16,7 +16,7 @@
 	<artifactId>amin-pet-clinic</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<name>amin-pet-clinic</name>
-	<description>My version of Spring Framework pet clinic that I am developing from scratch.</description>
+	<description>A version of the Spring Framework Pet Clinic sample application, that I'm developing from scratch.</description>
 
 	<properties>
 		<java.version>1.8</java.version>
