@@ -5,18 +5,16 @@ import maburhan.aminpetclinic.model.Owner;
 import maburhan.aminpetclinic.model.Vet;
 import maburhan.aminpetclinic.services.OwnerService;
 import maburhan.aminpetclinic.services.VetService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Dataloader implements CommandLineRunner {
+public class DataLoader implements CommandLineRunner {
 
     private final OwnerService ownerService;
     private final VetService vetService;
 
-    @Autowired
-    public Dataloader(OwnerService ownerService, VetService vetService) {
+    public DataLoader(OwnerService ownerService, VetService vetService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
     }
