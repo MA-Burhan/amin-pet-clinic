@@ -1,14 +1,8 @@
 package maburhan.aminpetclinic.bootstrap;
 
 import com.github.javafaker.Faker;
-import maburhan.aminpetclinic.model.Owner;
-import maburhan.aminpetclinic.model.Pet;
-import maburhan.aminpetclinic.model.PetType;
-import maburhan.aminpetclinic.model.Vet;
-import maburhan.aminpetclinic.services.OwnerService;
-import maburhan.aminpetclinic.services.PetService;
-import maburhan.aminpetclinic.services.PetTypeService;
-import maburhan.aminpetclinic.services.VetService;
+import maburhan.aminpetclinic.model.*;
+import maburhan.aminpetclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -22,17 +16,27 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final PetService petService;
+    private final SpecialtyService specialtyService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, PetService petService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, PetService petService, SpecialtyService specialtyService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.petService = petService;
+        this.specialtyService = specialtyService;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
+        if(petService.findAll().isEmpty()) {
+            loadData();
+        }
+
+    }
+
+    private void loadData() {
+        /* Create and load Pet types */
         PetType dog = new PetType();
         dog.setName("dog");
         petTypeService.save(dog);
@@ -43,6 +47,8 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Loaded Pet Types....");
 
+
+        /* Create and load Owners */
         Faker faker = new Faker();
         Random random = new Random();
 
@@ -54,6 +60,7 @@ public class DataLoader implements CommandLineRunner {
             owner.setCity(faker.address().city());
             owner.setTelephone(faker.phoneNumber().cellPhone());
 
+            /* Create and load Pets */
             Pet pet = new Pet();
             pet.setPetType(random.nextBoolean() ? cat : dog);
             pet.setOwner(owner);
@@ -67,14 +74,45 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Loaded Owners....");
 
+        /* Create and load specialties */
+        Specialty radiology = new Specialty();
+        radiology.setName("radiology");
+        specialtyService.save(radiology);
+
+        Specialty surgery = new Specialty();
+        surgery.setName("surgery");
+        specialtyService.save(surgery);
+
+        Specialty dentistry = new Specialty();
+        dentistry.setName("dentistry");
+        specialtyService.save(dentistry);
+
+        System.out.println("Loaded specialties....");
+
+        /* Create and load vets */
         for (int i = 0; i < 10; i++) {
             Vet vet = new Vet();
             vet.setFirstName(faker.name().firstName());
             vet.setLastName(faker.name().firstName());
+
+            int rand = random.nextInt(3);
+            Specialty specialty = null;
+            switch(rand){
+                case 0:
+                    specialty = radiology;
+                    break;
+                case 1:
+                    specialty = surgery;
+                    break;
+                case 2:
+                    specialty = dentistry;
+                    break;
+            }
+            vet.addSpecialty(specialty);
+
             vetService.save(vet);
         }
 
         System.out.println("Loaded Vets....");
-
     }
 }

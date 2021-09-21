@@ -1,16 +1,21 @@
 package maburhan.aminpetclinic.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Vet extends Person{
 
-    Set<Specialty> specialities;
+    Set<Specialty> specialties = new HashSet<>();
 
-    public Set<Specialty> getSpecialities(){
-        return specialities;
+    public Set<Specialty> getSpecialties(){
+        return specialties;
     }
 
-    public void setSpecialities(Set<Specialty> specialities){
-        this.specialities = specialities;
+    public void setSpecialties(Set<Specialty> specialties){
+        this.specialties = specialties;
+    }
+
+    public boolean addSpecialty(Specialty specialty) {
+        return specialties.add(specialty);
     }
 }
