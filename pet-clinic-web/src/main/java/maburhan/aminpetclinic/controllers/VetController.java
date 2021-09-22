@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import maburhan.aminpetclinic.services.VetService;
 
-@RequestMapping("/vets")
 @Controller
 public class VetController {
 
@@ -15,7 +14,7 @@ public class VetController {
         this.vetService = vetService;
     }
 
-    @RequestMapping
+    @RequestMapping({"/vets", "/vets.html"})
     public String listVets(Model model){
         model.addAttribute("vets", vetService.findAll());
         return "vets/index";
