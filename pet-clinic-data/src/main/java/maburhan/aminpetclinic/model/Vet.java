@@ -5,11 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "vets")
+@Table(name = "vet")
 public class Vet extends Person{
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "vets_specialties",
+    @JoinTable(name = "vet_specialty",
             joinColumns = @JoinColumn(name = "vet_id"),
             inverseJoinColumns = @JoinColumn(name = "specialty_id"))
     Set<Specialty> specialties = new HashSet<>();
