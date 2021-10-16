@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Random;
 
 @Component
@@ -15,21 +16,19 @@ public class DataLoader implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
     private final PetTypeService petTypeService;
-    private final PetService petService;
     private final SpecialtyService specialtyService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, PetService petService, SpecialtyService specialtyService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
-        this.petService = petService;
         this.specialtyService = specialtyService;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        if(petService.findAll().isEmpty()) {
+        if(ownerService.findAll().isEmpty()) {
             loadData();
         }
 
@@ -49,7 +48,7 @@ public class DataLoader implements CommandLineRunner {
 
 
         /* Create and load Owners */
-        Faker faker = new Faker();
+        Faker faker = new Faker(Locale.UK);
         Random random = new Random();
 
         for (int i = 0; i < 10; i++) {
@@ -60,13 +59,21 @@ public class DataLoader implements CommandLineRunner {
             owner.setCity(faker.address().city());
             owner.setTelephone(faker.phoneNumber().cellPhone());
 
-            /* Create and load Pets */
-            Pet pet = new Pet();
-            pet.setPetType(random.nextBoolean() ? cat : dog);
-            pet.setOwner(owner);
-            pet.setBirthDate(LocalDate.now().minusYears(random.nextInt(10)));
-            pet.setName(faker.name().firstName());
-            petService.save(pet);
+                /* Create and load Pets */
+                Pet pet = new Pet();
+                pet.setPetType(random.nextBoolean() ? cat : dog);
+                pet.setOwner(owner);
+                pet.setBirthDate(LocalDate.now().minusDays(random.nextInt(3600)));
+                String petName = pet.getPetType() == cat ? faker.cat().name() : faker.dog().name();
+                pet.setName(petName);
+
+                    /* Create visit for pet */
+                    Visit visit = new Visit();
+                    visit.setPet(pet);
+                    visit.setDescription(faker.medical().symptoms());
+                    visit.setDate(LocalDate.now().plusDays(random.nextInt(90)));
+
+                pet.addVisit(visit);
 
             owner.addPet(pet);
             ownerService.save(owner);

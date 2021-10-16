@@ -23,6 +23,10 @@ public class Pet extends NamedEntity {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
     private Set<Visit> visits = new HashSet<>();
 
+    public boolean addVisit(Visit visit){
+        return visits.add(visit);
+    }
+
     public PetType getPetType() {
         return petType;
     }
