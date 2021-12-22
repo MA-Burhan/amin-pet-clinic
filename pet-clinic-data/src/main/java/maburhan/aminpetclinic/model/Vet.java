@@ -22,7 +22,10 @@ public class Vet extends Person{
     @Builder
     public Vet(Long id, String firstName, String lastName, Set<Specialty> specialties) {
         super(id, firstName, lastName);
-        this.specialties = specialties;
+        if(specialties != null){
+            this.specialties = specialties;
+        }
+
     }
 
     public boolean addSpecialty(Specialty specialty) {

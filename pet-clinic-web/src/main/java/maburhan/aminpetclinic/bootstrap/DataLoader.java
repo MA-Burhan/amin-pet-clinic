@@ -40,13 +40,12 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadData() {
+
         /* Create and load Pet types */
-        PetType dog = new PetType();
-        dog.setName("dog");
+        PetType dog = new PetType("dog");
         petTypeService.save(dog);
 
-        PetType cat = new PetType();
-        cat.setName("cat");
+        PetType cat = new PetType("cat");
         petTypeService.save(cat);
 
         System.out.println("Loaded Pet Types....");
@@ -57,30 +56,34 @@ public class DataLoader implements CommandLineRunner {
         Random random = new Random();
 
         for (int i = 0; i < 10; i++) {
-            Owner owner = new Owner();
-            owner.setFirstName(faker.name().firstName());
-            owner.setLastName(faker.name().lastName());
-            owner.setAddress(faker.address().streetAddress());
-            owner.setCity(faker.address().city());
-            owner.setTelephone(faker.phoneNumber().cellPhone());
+            Owner owner = Owner.builder()
+                    .firstName(faker.name().firstName())
+                    .lastName(faker.name().lastName())
+                    .address(faker.address().streetAddress())
+                    .city(faker.address().city()).telephone(faker.phoneNumber().cellPhone())
+                    .build();
 
-                /* Create and load Pets */
-                Pet pet = new Pet();
-                pet.setPetType(random.nextBoolean() ? cat : dog);
-                pet.setOwner(owner);
-                pet.setBirthDate(LocalDate.now().minusDays(random.nextInt(3600)));
-                String petName = pet.getPetType() == cat ? faker.cat().name() : faker.dog().name();
-                pet.setName(petName);
+            /* Add pet to owner */
+            Pet pet = Pet.builder()
+                    .petType(random.nextBoolean() ? cat : dog)
+                    .owner(owner)
+                    .birthDate(LocalDate.now().minusDays(random.nextInt(3600)))
+                    .build();
 
-                    /* Create visit for pet */
-                    Visit visit = new Visit();
-                    visit.setPet(pet);
-                    visit.setDescription(faker.medical().symptoms());
-                    visit.setDate(LocalDate.now().plusDays(random.nextInt(90)));
+            String petName = pet.getPetType() == cat ? faker.cat().name() : faker.dog().name();
+            pet.setName(petName);
 
-                pet.addVisit(visit);
+            /* Create visit for pet */
+            Visit visit = Visit.builder()
+                    .pet(pet)
+                    .description(faker.medical().symptoms())
+                    .date(LocalDate.now().plusDays(random.nextInt(90)))
+                    .build();
 
+
+            pet.addVisit(visit);
             owner.addPet(pet);
+
             ownerService.save(owner);
             petService.save(pet);
             visitService.save(visit);
@@ -89,16 +92,13 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Loaded Owners....");
 
         /* Create and load specialties */
-        Specialty radiology = new Specialty();
-        radiology.setName("radiology");
+        Specialty radiology = new Specialty("radiology");
         specialtyService.save(radiology);
 
-        Specialty surgery = new Specialty();
-        surgery.setName("surgery");
+        Specialty surgery = new Specialty("surgery");
         specialtyService.save(surgery);
 
-        Specialty dentistry = new Specialty();
-        dentistry.setName("dentistry");
+        Specialty dentistry = new Specialty("dentistry");
         specialtyService.save(dentistry);
 
         System.out.println("Loaded specialties....");
