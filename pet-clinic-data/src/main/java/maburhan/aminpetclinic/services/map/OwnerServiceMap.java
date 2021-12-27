@@ -1,11 +1,9 @@
 package maburhan.aminpetclinic.services.map;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 import maburhan.aminpetclinic.model.Owner;
 import maburhan.aminpetclinic.services.OwnerService;
-
-import java.util.Map;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 @Service
 @Profile("map")
@@ -13,9 +11,15 @@ public class OwnerServiceMap extends AbstractMapService<Owner> implements OwnerS
 
     @Override
     public Owner findByLastName(String lastName) {
-        for (Map.Entry<Long, Owner> entry : map.entrySet()) {
-            if (entry.getValue().getLastName().equals(lastName)) {
-                return entry.getValue();
+//        for (Map.Entry<Long, Owner> entry : map.entrySet()) {
+//            if (entry.getValue().getLastName().equalsIgnoreCase(lastName)) {
+//                return entry.getValue();
+//            }
+//        }
+
+        for (Owner owner : map.values()) {
+            if (owner.getLastName().equalsIgnoreCase(lastName)) {
+                return owner;
             }
         }
         return null;
