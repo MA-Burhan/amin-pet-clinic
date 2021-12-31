@@ -21,6 +21,7 @@ class OwnerServiceJpaTest {
     OwnerRepository repository;
 
     OwnerServiceJpa service;
+
     Owner owner;
     final Long ownerId = 1L;
     final String lastName= "Doe";

@@ -1,54 +1,41 @@
 package maburhan.aminpetclinic.services.map;
 
-import maburhan.aminpetclinic.model.BaseEntity;
+import maburhan.aminpetclinic.repositories.map.CrudMapRepository;
 import maburhan.aminpetclinic.services.CrudService;
 
-import java.util.*;
+import java.util.Set;
 
-public abstract class AbstractMapService<T extends BaseEntity> implements CrudService<T, Long> {
+public abstract class AbstractMapService<T, ID, U extends CrudMapRepository<T, ID>>
+        implements CrudService<T, ID> {
 
-    protected final Map<Long, T> map = new HashMap<>();
+    protected final U repository;
 
-    @Override
-    public Set<T> findAll() {
-        return new HashSet<>(map.values());
+    public AbstractMapService(U repository) {
+        this.repository = repository;
     }
 
     @Override
-    public T findById(Long id) {
-        return map.get(id);
+    public Set<T> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public T findById(ID id) {
+        return repository.findById(id);
     }
 
     @Override
     public T save(T object) {
-        if (object != null) {
-            if (object.getId() == null) {
-                object.setId(getNextId());
-            }
-            map.put(object.getId(), object);
-            return object;
-        }
-        else {
-            throw new IllegalArgumentException("Object cannot be null");
-        }
-    }
-
-    private Long getNextId(){
-        if (map.isEmpty()) {
-            return 1L;
-        } else {
-            return Collections.max(map.keySet()) + 1;
-        }
+        return repository.save(object);
     }
 
     @Override
     public void delete(T object) {
-        map.entrySet().removeIf(entry -> entry.getValue().equals(object));
+        repository.delete(object);
     }
 
     @Override
-    public void deleteById(Long id) {
-        map.remove(id);
-
+    public void deleteById(ID id) {
+        repository.deleteById(id);
     }
 }

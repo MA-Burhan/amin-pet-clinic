@@ -1,88 +1,104 @@
 package maburhan.aminpetclinic.services.map;
 
 import maburhan.aminpetclinic.model.Owner;
+import maburhan.aminpetclinic.repositories.map.OwnerMapRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class OwnerServiceMapTest {
 
-    OwnerServiceMap ownerServiceMap;
+    @Mock
+    OwnerMapRepository repository;
+
+    OwnerServiceMap service;
     Owner owner;
     final Long ownerId = 1L;
     final String lastName= "Doe";
 
     @BeforeEach
     void setUp() {
-        ownerServiceMap = new OwnerServiceMap();
+        MockitoAnnotations.initMocks(this);
+        service = new OwnerServiceMap(repository);
         owner = Owner.builder().id(ownerId).lastName(lastName).build();
-        ownerServiceMap.save(owner);
     }
 
     @Test
     void findAll() {
-        Set<Owner> ownerSet = ownerServiceMap.findAll();
+        Set<Owner> ownerSet = new HashSet<>();
+        ownerSet.add(owner);
 
-        assertEquals(1, ownerSet.size());
-        assertTrue(ownerSet.contains(owner));
+        when(repository.findAll()).thenReturn(ownerSet);
+
+        Set<Owner> returnOwners = service.findAll();
+
+        assertNotNull(returnOwners);
+        assertEquals(1, returnOwners.size());
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void findById() {
-        Owner ownerResult = ownerServiceMap.findById(ownerId);
+        when(repository.findById(eq(ownerId))).thenReturn(owner);
 
-        assertEquals(owner, ownerResult);
+        Owner returnOwner = service.findById(ownerId);
+
+        assertNotNull(returnOwner);
+        assertEquals(owner, returnOwner);
     }
 
     @Test
-    void saveOwnerWithExistingId() {
-        Long id = 13L;
-        Owner owner2 = Owner.builder().id(id).build();
+    void findByIdNotFound() {
+        when(repository.findById(anyLong())).thenReturn(null);
 
-        Owner savedOwner = ownerServiceMap.save(owner2);
+        Owner returnOwner = service.findById(21L);
 
-        assertEquals(id, savedOwner.getId());
+        assertNull(returnOwner);
     }
 
     @Test
-    void saveOwnerWithNullId(){
-        Owner savedOwner = ownerServiceMap.save(new Owner());
+    void save() {
+        Owner ownerToSave = Owner.builder().lastName(lastName).build();
+
+        when(repository.save(eq(ownerToSave))).thenReturn(owner);
+
+        Owner savedOwner = service.save(ownerToSave);
 
         assertNotNull(savedOwner);
-        assertNotNull(savedOwner.getId());
+        assertEquals(owner, savedOwner);
     }
 
     @Test
     void delete() {
-        ownerServiceMap.delete(owner);
+        service.delete(owner);
 
-        assertFalse(ownerServiceMap.findAll().contains(owner));
+        verify(repository, times(1)).delete(eq(owner));
     }
 
     @Test
     void deleteById() {
-        ownerServiceMap.deleteById(ownerId);
+        service.deleteById(ownerId);
 
-        assertFalse(ownerServiceMap.findAll().contains(owner));
+        verify(repository, times(1)).deleteById(eq(ownerId));
     }
 
     @Test
     void findByLastName() {
-        Owner doe = ownerServiceMap.findByLastName(lastName);
+        when(repository.findByLastName(any())).thenReturn(Optional.of(owner));
 
-        assertNotNull(doe);
-        assertEquals(ownerId, doe.getId());
-        assertEquals(lastName, doe.getLastName());
+        Owner doe = service.findByLastName(lastName);
+
+        assertEquals(owner, doe);
+        verify(repository, times(1)).findByLastName(any());
     }
 
-    @Test
-    void findByLastNameNotFound() {
-        Owner doe = ownerServiceMap.findByLastName("foo");
-
-        assertNull(doe);
-    }
 
 }

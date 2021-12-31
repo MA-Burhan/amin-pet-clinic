@@ -6,12 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractJpaService<T, ID, R extends CrudRepository<T, ID>>
+public abstract class AbstractJpaService<T, ID, U extends CrudRepository<T, ID>>
         implements CrudService<T, ID> {
 
-    protected final R repository;
+    protected final U repository;
 
-    public AbstractJpaService(R repository) {
+    public AbstractJpaService(U repository) {
         this.repository = repository;
     }
 

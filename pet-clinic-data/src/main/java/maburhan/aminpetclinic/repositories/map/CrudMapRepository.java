@@ -1,8 +1,8 @@
-package maburhan.aminpetclinic.services;
+package maburhan.aminpetclinic.repositories.map;
 
 import java.util.Set;
 
-public interface CrudService<T, ID> {
+public interface CrudMapRepository<T, ID> {
 
     Set<T> findAll();
 
@@ -13,5 +13,4 @@ public interface CrudService<T, ID> {
     void delete(T object);
 
     void deleteById(ID id);
-
 }
