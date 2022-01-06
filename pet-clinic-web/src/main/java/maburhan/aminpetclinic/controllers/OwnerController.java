@@ -3,10 +3,11 @@ package maburhan.aminpetclinic.controllers;
 import maburhan.aminpetclinic.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/owners")
 @Controller
+@RequestMapping("/owners")
 public class OwnerController {
 
     private final OwnerService ownerService;
@@ -15,13 +16,13 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
-    @RequestMapping({"/", "/index"})
+    @GetMapping({"/", "/index"})
     public String listOwners(Model model){
         model.addAttribute("owners", ownerService.findAll());
         return "owners/index";
     }
 
-    @RequestMapping("/find")
+    @GetMapping("/find")
     public String findOwners(){
         return "owners/find";
     }

@@ -1,12 +1,14 @@
 package maburhan.aminpetclinic.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/error")
 public class ErrorController {
 
-    @RequestMapping("oups")
+    @GetMapping("/")
     public String handleError(){
         return "error";
     }
